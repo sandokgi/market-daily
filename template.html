@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+@font-face {
+    font-family: 'Cafe24ProSlim';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2511-1@1.0/Cafe24PROSlim-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Cafe24ProSlim';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2511-1@1.0/Cafe24PROSlim-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Cafe24ProSlim';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2511-1@1.0/Cafe24PROSlim-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Presentation';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-1Thin.woff2') format('woff2');
+    font-weight: 100;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Presentation';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-2ExtraLight.woff2') format('woff2');
+    font-weight: 200;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Presentation';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-3Light.woff2') format('woff2');
+    font-weight: 300;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Presentation';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-4Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Presentation';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-5Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Presentation';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-6SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Presentation';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-7Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Presentation';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-8ExtraBold.woff2') format('woff2');
+    font-weight: 800;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Presentation';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-9Black.woff2') format('woff2');
+    font-weight: 900;
+    font-display: swap;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Presentation', sans-serif;
+  background: #161616;
+  width: 800px;
+  padding: 40px 40px 28px;
+  color: #e5e5e5;
+}
+.date { font-family: 'Cafe24ProSlim', sans-serif; font-size: 16px; color: #ffffff; margin-bottom: 6px; font-weight: 400; }
+.title {
+  font-family: 'Cafe24ProSlim', sans-serif;
+  font-size: 56px; font-weight: 700; color: #ffffff; line-height: 57px; margin-bottom: 28px; letter-spacing: -2px;
+}
+.divider { height: 1px; background: #2e2e2e; margin-bottom: 22px; }
+.section { margin-bottom: 18px; }
+.section-label { font-size: 19px; font-weight: 600; color: #ffffff; line-height: 20px; margin-bottom: 8px; display: flex; align-items: flex-end; gap: 6px; }
+.section-label .sub { font-size: 13px; font-weight: 400; color: #999; }
+.dark-card { background: #2a2a2a; border-radius: 10px; padding: 14px 18px; border: 1px solid #2e2e2e; margin-top: 0; }
+.dark-card p { font-size: 17.5px; line-height: 27px; color: #d0d0d0; }
+
+/* 지수 카드 */
+.index-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.index-card { background: #2a2a2a; border-radius: 10px; padding: 14px 18px 16px; border: 1px solid #2e2e2e; }
+.index-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.index-name { font-size: 17px; color: #999; font-weight: 600; letter-spacing: -0.02em; }
+.index-chart { width: 100%; height: 68px; margin-bottom: 10px; overflow: hidden; border-radius: 4px; }
+.index-chart img { width: 100%; height: 100%; object-fit: fill; display: block; }
+.index-value { font-size: 28px; font-weight: 600; text-align: right; letter-spacing: -0.3px; }
+.index-value.up { color: #FD2929; }
+.index-value.down { color: #47A5ED; }
+
+/* 수급 카드 */
+.supply-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.supply-card { background: #2a2a2a; border-radius: 10px; padding: 12px 16px; display: flex; flex-direction: column; border: 1px solid #2e2e2e; }
+.supply-label { font-size: 16px; color: #999; margin-bottom: 8px; font-weight: 600; }
+.supply-value { font-size: 21px; font-weight: 700; text-align: right; }
+.supply-value.up { color: #FD2929; }
+.supply-value.down { color: #47A5ED; }
+
+/* 환율·금리 카드 */
+.rate-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.rate-card { background: #2a2a2a; border-radius: 10px; padding: 12px 16px; display: flex; flex-direction: column; border: 1px solid #2e2e2e; }
+.rate-label { font-size: 16px; color: #999; margin-bottom: 8px; font-weight: 600; }
+.rate-value { font-size: 21px; font-weight: 700; text-align: right; }
+.rate-value.up { color: #FD2929; }
+.rate-value.down { color: #47A5ED; }
+
+.footnote { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #777; margin-top: -4px; margin-bottom: 0; line-height: 1em; }
+.footnote-source { color: #555; margin-left: auto; }
+</style>
+</head>
+<body>
+  <div class="date">{{date}}</div>
+  <div class="title">한국 시장 마감 정리</div>
+  <div class="divider"></div>
+
+  <!-- 지수동향 -->
+  <div class="section">
+    <div class="section-label">지수동향</div>
+    <div class="index-row">
+      <div class="index-card">
+        <div class="index-card-header">
+          <span class="index-name">KOSPI</span>
+        </div>
+        <div class="index-chart"><img src="data:image/png;base64,{{kospi_chart}}" /></div>
+        <div class="index-value {{kospi_class}}">{{kospi_value}}p ({{kospi_change}})</div>
+      </div>
+      <div class="index-card">
+        <div class="index-card-header">
+          <span class="index-name">KOSDAQ</span>
+        </div>
+        <div class="index-chart"><img src="data:image/png;base64,{{kosdaq_chart}}" /></div>
+        <div class="index-value {{kosdaq_class}}">{{kosdaq_value}}p ({{kosdaq_change}})</div>
+      </div>
+    </div>
+    <div class="dark-card" style="margin-top:16px;">
+      <p>{{kospi_comment}}</p>
+      <p style="margin-top:12px;">{{kosdaq_comment}}</p>
+    </div>
+  </div>
+
+  <!-- 이슈 -->
+  <div class="section">
+    <div class="section-label">이슈</div>
+    <div class="dark-card"><p>{{issue_text}}</p></div>
+  </div>
+
+  <!-- 수급 현황 -->
+  <div class="section">
+    <div class="section-label">수급 현황 <span class="sub">(코스피, 16시 KRX기준)</span></div>
+    <div class="supply-row">
+      <div class="supply-card">
+        <div class="supply-label">외국인</div>
+        <div class="supply-value {{foreign_class}}">{{foreign_flow}}</div>
+      </div>
+      <div class="supply-card">
+        <div class="supply-label">개인</div>
+        <div class="supply-value {{individual_class}}">{{individual_flow}}</div>
+      </div>
+      <div class="supply-card">
+        <div class="supply-label">기관</div>
+        <div class="supply-value {{institution_class}}">{{institution_flow}}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 업종별 현황 -->
+  <div class="section">
+    <div class="section-label">업종별 현황</div>
+    <div class="dark-card"><p>{{sector_text}}</p></div>
+  </div>
+
+  <!-- 특징주 -->
+  <div class="section">
+    <div class="section-label">특징주</div>
+    <div class="dark-card"><p>{{stock_text}}</p></div>
+  </div>
+
+  <!-- 환율·금리 -->
+  <div class="section">
+    <div class="section-label">환율·금리</div>
+    <div class="rate-row">
+      <div class="rate-card">
+        <div class="rate-label">원/달러 환율</div>
+        <div class="rate-value {{exchange_class}}">{{exchange_rate}} ({{exchange_change}})</div>
+      </div>
+      <div class="rate-card">
+        <div class="rate-label">국고채 3년물</div>
+        <div class="rate-value {{bond_class}}">{{bond_rate}} ({{bond_change}})</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footnote">
+    <span>{{footnote}}</span>
+    <span class="footnote-source">출처: 한국투자증권 투자전략팀 김대준</span>
+  </div>
+</body>
+</html>

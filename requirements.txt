@@ -1,0 +1,7 @@
+telethon
+Pillow
+requests
+pytz
+yfinance
+matplotlib
+playwright
