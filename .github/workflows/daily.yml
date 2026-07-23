@@ -2,37 +2,68 @@ name: 한국 시장 마감 정리
 
 on:
   schedule:
-    - cron: '20 8 * * 1-5'  # 매주 월~금 17:20 KST (08:20 UTC)
-  workflow_dispatch:  # 수동 실행 가능
+    - cron: '30,40,50 7 * * 1-5'    # 4:30, 4:40, 4:50 KST
+    - cron: '0,10,20,30 8 * * 1-5'  # 5:00, 5:10, 5:20, 5:30 KST
+  workflow_dispatch:
 
 jobs:
   send-market-summary:
     runs-on: ubuntu-latest
 
     steps:
+      - name: 오늘 날짜 확인 (KST)
+        id: date
+        run: echo "today=$(TZ='Asia/Seoul' date +%Y-%m-%d)" >> $GITHUB_OUTPUT
+
+      - name: 오늘 이미 전송했는지 확인
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: .sent
+          key: sent-${{ steps.date.outputs.today }}
+
+      - name: 이미 전송됨 - 스킵
+        if: steps.cache.outputs.cache-hit == 'true'
+        run: echo "오늘 이미 전송 완료, 스킵합니다." && exit 0
+
       - name: 코드 체크아웃
+        if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/checkout@v4
 
       - name: Python 설정
+        if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
       - name: 의존성 설치
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
           pip install telethon requests pytz yfinance matplotlib playwright
           playwright install chromium
           playwright install-deps chromium
 
       - name: 텔레그램 세션 파일 복원
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
           echo "${{ secrets.TELEGRAM_SESSION }}" | base64 -d | gunzip > session.session
 
       - name: 실행
+        if: steps.cache.outputs.cache-hit != 'true'
+        id: run
         env:
           TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
           TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_USER_ID: ${{ secrets.SLACK_USER_ID }}
           SLACK_DAILY_CHANNEL_ID: ${{ secrets.SLACK_DAILY_CHANNEL_ID }}
-        run: python main.py
+        run: |
+          output=$(python main.py 2>&1)
+          echo "$output"
+          if echo "$output" | grep -q "슬랙 전송 완료"; then
+            echo "sent=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 전송 완료 마킹 (다음 실행에서 중복 방지)
+        if: steps.run.outputs.sent == 'true'
+        run: mkdir -p .sent && touch .sent/done
