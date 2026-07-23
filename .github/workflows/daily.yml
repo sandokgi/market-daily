@@ -26,7 +26,7 @@ jobs:
 
       - name: 텔레그램 세션 파일 복원
         run: |
-          echo "${{ secrets.TELEGRAM_SESSION }}" | base64 -d > session.session
+          echo "${{ secrets.TELEGRAM_SESSION }}" | base64 -d | gunzip > session.session
 
       - name: 실행
         env:
