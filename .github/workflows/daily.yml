@@ -1,10 +1,7 @@
 name: 한국 시장 마감 정리
 
 on:
-  schedule:
-    - cron: '30,40,50 7 * * 1-5'    # 4:30, 4:40, 4:50 KST
-    - cron: '0,10,20,30 8 * * 1-5'  # 5:00, 5:10, 5:20, 5:30 KST
-  workflow_dispatch:
+  workflow_dispatch:  # cron-job.org에서 매분 트리거 (KST 16:00~17:59, 평일)
 
 jobs:
   send-market-summary:
@@ -36,6 +33,13 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: pip 캐시
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ hashFiles('requirements.txt') }}
+
       - name: 의존성 설치
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
@@ -64,6 +68,6 @@ jobs:
             echo "sent=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: 전송 완료 마킹 (다음 실행에서 중복 방지)
+      - name: 전송 완료 마킹
         if: steps.run.outputs.sent == 'true'
         run: mkdir -p .sent && touch .sent/done
