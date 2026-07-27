@@ -307,6 +307,37 @@ async def render_html(html_content):
         return screenshot
 
 
+# ===== 오늘 이미 전송했는지 확인 =====
+def already_sent_today():
+    today_date_str = datetime.now(KST).strftime("%Y년 %m월 %d일")
+    channel_id = SLACK_DAILY_CHANNEL_ID if not TEST_MODE else None
+
+    if TEST_MODE:
+        dm_response = requests.post(
+            "https://slack.com/api/conversations.open",
+            headers={"Authorization": f"Bearer {SLACK_BOT_TOKEN}"},
+            json={"users": SLACK_USER_ID}
+        )
+        dm_data = dm_response.json()
+        if not dm_data.get("ok"):
+            return False
+        channel_id = dm_data["channel"]["id"]
+
+    response = requests.get(
+        "https://slack.com/api/conversations.history",
+        headers={"Authorization": f"Bearer {SLACK_BOT_TOKEN}"},
+        params={"channel": channel_id, "limit": 20}
+    )
+    data = response.json()
+    if not data.get("ok"):
+        return False
+
+    for msg in data.get("messages", []):
+        if "한국 시장 마감 정리" in msg.get("text", "") and today_date_str in msg.get("text", ""):
+            return True
+    return False
+
+
 # ===== 슬랙 DM 채널 ID 가져오기 =====
 def get_dm_channel_id():
     dm_response = requests.post(
@@ -376,6 +407,11 @@ def send_to_slack(image_bytes, message_count):
 
 # ===== 메인 =====
 async def main():
+    print("오늘 이미 전송했는지 확인 중...")
+    if already_sent_today():
+        print("오늘 이미 전송 완료. 스킵합니다.")
+        return
+
     print("텔레그램 메시지 가져오는 중...")
     messages = await get_today_messages()
     print(f"{len(messages)}개 메시지 발견")
