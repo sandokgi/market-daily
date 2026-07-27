@@ -3,6 +3,10 @@ name: 한국 시장 마감 정리
 on:
   workflow_dispatch:  # cron-job.org에서 매분 트리거 (KST 16:00~17:59, 평일)
 
+concurrency:
+  group: market-daily-send
+  cancel-in-progress: false
+
 jobs:
   send-market-summary:
     runs-on: ubuntu-latest
