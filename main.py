@@ -352,21 +352,34 @@ def get_dm_channel_id():
     return dm_data["channel"]["id"]
 
 
-# ===== 슬랙 실패 알림 =====
-def send_failure_notice():
+# ===== 슬랙 DM 알림 공통 =====
+def send_dm_notice(text):
     channel_id = get_dm_channel_id()
     if not channel_id:
         return
-    today_str = datetime.now(KST).strftime("%Y년 %m월 %d일")
     requests.post(
         "https://slack.com/api/chat.postMessage",
         headers={"Authorization": f"Bearer {SLACK_BOT_TOKEN}"},
-        json={
-            "channel": channel_id,
-            "text": f":warning: {today_str} 시황 메시지를 찾지 못했습니다. 텔레그램 채널을 확인해주세요."
-        }
+        json={"channel": channel_id, "text": text}
     )
+
+
+# ===== 슬랙 실패 알림 (17:30 이후에만) =====
+def send_failure_notice():
+    now = datetime.now(KST).time()
+    if now < TARGET_END:
+        print("아직 메시지 수집 시간 내 — 실패 알림 스킵")
+        return
+    today_str = datetime.now(KST).strftime("%Y년 %m월 %d일")
+    send_dm_notice(f":warning: {today_str} 시황 메시지를 찾지 못했습니다. 텔레그램 채널을 확인해주세요.")
     print("실패 알림 전송 완료")
+
+
+# ===== 슬랙 성공 알림 =====
+def send_success_notice():
+    today_str = datetime.now(KST).strftime("%Y년 %m월 %d일")
+    send_dm_notice(f":white_check_mark: {today_str} 시황 정리 전송 완료!")
+    print("성공 알림 전송 완료")
 
 
 # ===== 슬랙으로 전송 =====
@@ -447,6 +460,7 @@ async def main():
 
     print("슬랙으로 전송 중...")
     send_to_slack(image_bytes, len(messages))
+    send_success_notice()
 
 
 if __name__ == "__main__":
