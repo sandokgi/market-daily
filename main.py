@@ -53,7 +53,7 @@ async def get_today_messages():
                 continue
             if msg_time.date() < today:
                 break
-            if TARGET_START <= msg_time.time() <= TARGET_END and '시장 정리' in message.text:
+            if msg_time.time() >= TARGET_START and '시장 정리' in message.text:
                 messages.append(message.text)
 
         return messages
