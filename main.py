@@ -257,7 +257,7 @@ def create_chart_base64(df, is_up):
     if len(today_prices) < 2:
         return empty_chart()
 
-    baseline = float(today_prices.iloc[0])
+    baseline = float(prev_prices.iloc[-1]) if len(prev_prices) > 0 else float(today_prices.iloc[0])
     total_len = len(prev_prices) + len(today_prices)
     x_prev = list(range(len(prev_prices)))
     x_today = list(range(len(prev_prices), total_len))
