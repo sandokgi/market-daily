@@ -66,7 +66,7 @@ jobs:
           SLACK_USER_ID: ${{ secrets.SLACK_USER_ID }}
           SLACK_DAILY_CHANNEL_ID: ${{ secrets.SLACK_DAILY_CHANNEL_ID }}
         run: |
-          output=$(python main.py 2>&1)
+          output=$(python3 main.py 2>&1)
           echo "$output"
           if echo "$output" | grep -q "슬랙 전송 완료"; then
             echo "sent=true" >> $GITHUB_OUTPUT
