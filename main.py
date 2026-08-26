@@ -325,14 +325,20 @@ def already_sent_today():
             return False
         channel_id = dm_data["channel"]["id"]
 
-    response = requests.get(
-        "https://slack.com/api/conversations.history",
-        headers={"Authorization": f"Bearer {SLACK_BOT_TOKEN}"},
-        params={"channel": channel_id, "limit": 20}
-    )
-    data = response.json()
+    try:
+        response = requests.get(
+            "https://slack.com/api/conversations.history",
+            headers={"Authorization": f"Bearer {SLACK_BOT_TOKEN}"},
+            params={"channel": channel_id, "limit": 20}
+        )
+        data = response.json()
+    except Exception as e:
+        print(f"슬랙 히스토리 확인 실패: {e} — 안전하게 종료")
+        return True
+
     if not data.get("ok"):
-        return False
+        print(f"슬랙 히스토리 API 오류: {data.get('error')} — 안전하게 종료")
+        return True
 
     for msg in data.get("messages", []):
         if "한국 시장 마감 정리" in msg.get("text", "") and today_date_str in msg.get("text", ""):
