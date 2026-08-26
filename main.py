@@ -13,14 +13,16 @@ import yfinance as yf
 from playwright.async_api import async_playwright
 
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # ===== 설정 =====
-TELEGRAM_API_ID = os.environ.get("TELEGRAM_API_ID", "30982164")
-TELEGRAM_API_HASH = os.environ.get("TELEGRAM_API_HASH", "fd6adb556a44d0941aeb3f91bdd440cf")
+TELEGRAM_API_ID = os.environ.get("TELEGRAM_API_ID")
+TELEGRAM_API_HASH = os.environ.get("TELEGRAM_API_HASH")
 TELEGRAM_CHANNEL = "한투증권 투자전략 김대준"
-SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN", "xoxb-9656565174614-11654721376550-8gV1gqA42lg2RuQnxRGiRqQB")
-SLACK_USER_ID = os.environ.get("SLACK_USER_ID", "U0BKBBCG280")
-SLACK_DAILY_CHANNEL_ID = os.environ.get("SLACK_DAILY_CHANNEL_ID", "C0BJKDQC6HX")
+SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN")
+SLACK_USER_ID = os.environ.get("SLACK_USER_ID")
+SLACK_DAILY_CHANNEL_ID = os.environ.get("SLACK_DAILY_CHANNEL_ID")
 
 TEST_MODE = False  # True: 본인 DM으로 전송 / False: 텔레그램_데일리 채널로 전송
 
