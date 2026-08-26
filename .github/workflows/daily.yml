@@ -47,7 +47,7 @@ jobs:
       - name: 의존성 설치
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          pip install telethon requests pytz yfinance matplotlib playwright
+          pip install telethon requests pytz yfinance matplotlib playwright python-dotenv
           playwright install chromium
           playwright install-deps chromium
 
